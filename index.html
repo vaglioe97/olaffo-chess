@@ -1,0 +1,843 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Emanuel Vaglio — CM Olaffo · Chess Coach</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400;0,600;0,700;1,400;1,600&family=Inter:wght@300;400;500;600&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
+<style>
+/* ─── RESET & TOKENS ────────────────────────────────────────── */
+*,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
+:root{
+  --gold:#D4AF37;
+  --gold-l:#e8c84a;
+  --gold-d:#a8872a;
+  --bg:#0a0a0a;
+  --bg2:#111111;
+  --bg3:#191919;
+  --card:#151515;
+  --txt:#ede8df;
+  --muted:#7a7570;
+  --subtle:#3a3530;
+  --border:rgba(212,175,55,.14);
+  --border2:rgba(255,255,255,.05);
+  --fh:'Playfair Display',Georgia,serif;
+  --fb:'Inter',system-ui,sans-serif;
+  --r:4px;
+  --ease:.3s ease;
+}
+html{scroll-behavior:smooth}
+body{font-family:var(--fb);background:var(--bg);color:var(--txt);line-height:1.65;font-size:16px;overflow-x:hidden}
+img{display:block;max-width:100%}
+a{color:inherit;text-decoration:none}
+button{font-family:var(--fb)}
+
+/* ─── TYPE ──────────────────────────────────────────────────── */
+h1,h2,h3,h4{font-family:var(--fh);line-height:1.15;font-weight:700}
+.eyebrow{font-size:.68rem;font-weight:600;letter-spacing:.22em;text-transform:uppercase;color:var(--gold);display:block;margin-bottom:.65rem}
+.sec-title{font-size:clamp(1.75rem,3.2vw,2.6rem);color:var(--txt);margin-bottom:.85rem}
+.sec-sub{font-size:.93rem;color:var(--muted);font-weight:300;max-width:500px;line-height:1.75}
+.bar{width:44px;height:2px;background:linear-gradient(90deg,var(--gold),var(--gold-d));margin-top:1.4rem}
+
+/* ─── LAYOUT ────────────────────────────────────────────────── */
+.wrap{max-width:1180px;margin:0 auto}
+section{padding:6rem 2rem}
+.sec-head{margin-bottom:3rem}
+
+/* ─── BUTTONS ───────────────────────────────────────────────── */
+.btn{display:inline-flex;align-items:center;gap:.5rem;padding:.82rem 1.9rem;border-radius:var(--r);font-size:.84rem;font-weight:600;letter-spacing:.04em;cursor:pointer;border:none;transition:all var(--ease);white-space:nowrap}
+.btn-gold{background:var(--gold);color:#000}
+.btn-gold:hover{background:var(--gold-l);transform:translateY(-2px);box-shadow:0 8px 28px rgba(212,175,55,.28)}
+.btn-ghost{background:transparent;color:var(--txt);border:1px solid rgba(255,255,255,.13)}
+.btn-ghost:hover{border-color:var(--gold);color:var(--gold);transform:translateY(-2px)}
+
+/* ─── NAV ───────────────────────────────────────────────────── */
+#nav{position:fixed;inset:0 0 auto;z-index:200;padding:1.2rem 2rem;display:flex;align-items:center;justify-content:space-between;transition:background var(--ease),border-bottom var(--ease)}
+#nav.solid{background:rgba(10,10,10,.96);backdrop-filter:blur(14px);border-bottom:1px solid var(--border)}
+.nav-logo{font-family:var(--fh);font-size:1.1rem;color:var(--gold);display:flex;align-items:center;gap:.45rem}
+.nav-logo span{color:var(--muted);font-weight:400;font-size:.9rem}
+.nav-links{list-style:none;display:flex;gap:2rem;align-items:center}
+.nav-links a{font-size:.8rem;font-weight:500;color:var(--muted);letter-spacing:.05em;transition:color var(--ease)}
+.nav-links a:hover{color:var(--gold)}
+.nav-book{background:var(--gold)!important;color:#000!important;padding:.45rem 1.1rem;border-radius:var(--r);font-weight:600!important}
+.nav-book:hover{background:var(--gold-l)!important}
+.hamburger{display:none;background:none;border:none;color:var(--txt);font-size:1.3rem;cursor:pointer;padding:.25rem}
+/* mobile overlay */
+#mob{display:none;position:fixed;inset:0;background:rgba(10,10,10,.98);z-index:199;flex-direction:column;align-items:center;justify-content:center;gap:2.2rem}
+#mob.open{display:flex}
+#mob a{font-family:var(--fh);font-size:2rem;color:var(--txt);transition:color var(--ease)}
+#mob a:hover{color:var(--gold)}
+#mob-close{position:absolute;top:1.5rem;right:1.5rem;background:none;border:none;color:var(--muted);font-size:1.5rem;cursor:pointer}
+
+/* ─── HERO ──────────────────────────────────────────────────── */
+#hero{min-height:100svh;display:flex;align-items:center;padding:7rem 2rem 5rem;position:relative;overflow:hidden}
+.hero-glow{position:absolute;inset:0;background:radial-gradient(ellipse 60% 60% at 75% 50%,rgba(212,175,55,.055) 0%,transparent 70%),radial-gradient(ellipse 40% 50% at 10% 85%,rgba(212,175,55,.035) 0%,transparent 60%);pointer-events:none}
+.hero-inner{position:relative;max-width:680px}
+.h-pre{display:flex;align-items:center;gap:.7rem;margin-bottom:1.6rem}
+.h-line{width:36px;height:1px;background:var(--gold)}
+.h-pre-txt{font-size:.68rem;font-weight:600;letter-spacing:.22em;text-transform:uppercase;color:var(--gold)}
+.hero-name{font-size:clamp(3rem,7vw,5.6rem);line-height:1.02;display:block;color:var(--txt)}
+.hero-handle{font-size:clamp(2.2rem,5vw,4rem);line-height:1.05;display:block;color:var(--gold);font-style:italic}
+.hero-badges{display:flex;flex-wrap:wrap;align-items:center;gap:.9rem;margin:1.6rem 0}
+.hbadge{display:flex;align-items:center;gap:.4rem;font-size:.78rem;color:var(--muted);font-weight:400}
+.hbadge i{color:var(--gold);font-size:.72rem}
+.dot-sep{width:3px;height:3px;border-radius:50%;background:var(--subtle)}
+.hero-tag{font-family:var(--fh);font-style:italic;font-size:clamp(.95rem,1.8vw,1.18rem);color:var(--muted);margin-bottom:2.6rem;max-width:440px}
+.hero-ctas{display:flex;gap:1rem;flex-wrap:wrap}
+.scroll-hint{position:absolute;bottom:2.5rem;left:50%;transform:translateX(-50%);display:flex;flex-direction:column;align-items:center;gap:.5rem;color:var(--subtle);font-size:.64rem;letter-spacing:.18em;text-transform:uppercase}
+.scroll-wire{width:1px;height:42px;background:linear-gradient(to bottom,var(--gold),transparent);animation:swire 1.8s ease-in-out infinite}
+@keyframes swire{0%,100%{opacity:.35}50%{opacity:1}}
+
+/* ─── RATINGS ───────────────────────────────────────────────── */
+#ratings{background:var(--bg2);border-top:1px solid var(--border2);border-bottom:1px solid var(--border2);padding:4.5rem 2rem}
+.ratings-head{text-align:center;margin-bottom:2.5rem}
+.r-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(190px,1fr));gap:1.25rem;max-width:880px;margin:0 auto}
+.r-card{background:var(--card);border:1px solid var(--border);border-radius:8px;padding:1.75rem 1.5rem;text-align:center;position:relative;overflow:hidden;transition:transform var(--ease),border-color var(--ease)}
+.r-card::before{content:'';position:absolute;top:0;left:0;right:0;height:1px;background:linear-gradient(90deg,transparent,var(--gold),transparent)}
+.r-card:hover{transform:translateY(-5px);border-color:rgba(212,175,55,.38)}
+.r-icon{font-size:1.6rem;margin-bottom:.65rem}
+.r-label{font-size:.66rem;font-weight:600;letter-spacing:.2em;text-transform:uppercase;color:var(--muted);margin-bottom:.4rem}
+.r-val{font-family:var(--fh);font-size:2.8rem;font-weight:700;color:var(--gold);line-height:1;margin-bottom:.3rem;transition:all .5s}
+.r-val.load{font-size:1.1rem;color:var(--subtle);animation:blink 1.4s ease infinite}
+@keyframes blink{0%,100%{opacity:.3}50%{opacity:.8}}
+.r-games{font-size:.72rem;color:var(--subtle);margin-bottom:.5rem}
+.live-pip{display:inline-flex;align-items:center;gap:.3rem;font-size:.62rem;color:#4ade80;font-weight:500}
+.pip{width:5px;height:5px;border-radius:50%;background:#4ade80;animation:pip 2s ease infinite}
+@keyframes pip{0%,100%{opacity:1;transform:scale(1)}50%{opacity:.4;transform:scale(.75)}}
+
+/* ─── HERO PHOTO ────────────────────────────────────────────── */
+.hero-photo{position:absolute;right:0;top:0;bottom:0;width:min(46vw,560px);overflow:hidden;pointer-events:none}
+.hero-photo img{width:100%;height:100%;object-fit:cover;object-position:center top;filter:grayscale(65%) brightness(.52);display:block}
+.hero-photo::before{content:'';position:absolute;inset:0;background:linear-gradient(to right,var(--bg) 0%,rgba(10,10,10,.5) 45%,transparent 75%);z-index:1}
+.hero-photo::after{content:'';position:absolute;inset:0;background:linear-gradient(to top,var(--bg) 0%,transparent 25%);z-index:1}
+@media(max-width:768px){.hero-photo{display:none}}
+
+/* ─── LOGO IMG ──────────────────────────────────────────────── */
+.logo-img{height:38px;width:auto;display:block;object-fit:contain}
+.foot-logo-img{height:52px;width:auto;display:block;object-fit:contain;opacity:.85}
+
+/* ─── ABOUT ─────────────────────────────────────────────────── */
+#about{background:var(--bg)}
+.about-grid{display:grid;grid-template-columns:1fr 1fr;gap:5rem;align-items:center}
+.about-photo-wrap{position:relative;max-width:400px}
+.about-photo{width:100%;display:block;border-radius:8px;object-fit:cover;aspect-ratio:4/5;object-position:center top;border:1px solid var(--border);filter:brightness(.9) saturate(.85)}
+.about-photo-badge{position:absolute;bottom:-1px;right:-1px;background:var(--gold);color:#000;padding:.9rem 1.25rem;border-radius:0 0 8px 0;display:flex;flex-direction:column;align-items:center;line-height:1}
+.about-photo-badge strong{font-family:var(--fh);font-size:1.7rem;font-weight:700}
+.about-photo-badge span{font-size:.65rem;font-weight:600;letter-spacing:.06em;text-transform:uppercase;margin-top:.2rem}
+.about-body p{font-size:.92rem;color:var(--muted);font-weight:300;line-height:1.85;margin-bottom:1.1rem}
+.about-body strong{color:var(--txt);font-weight:500}
+.tags{display:flex;flex-wrap:wrap;gap:.45rem;margin-top:1.4rem}
+.tag{padding:.3rem .8rem;background:rgba(212,175,55,.07);border:1px solid rgba(212,175,55,.18);border-radius:100px;font-size:.72rem;color:var(--gold);font-weight:500}
+.stats-row{display:grid;grid-template-columns:1fr 1fr;gap:.85rem;margin-top:1.6rem}
+.stat-box{padding:1.1rem;background:var(--bg2);border:1px solid var(--border2);border-radius:var(--r)}
+.stat-val{font-family:var(--fh);font-size:1.5rem;color:var(--gold);display:block;margin-bottom:.2rem}
+.stat-lbl{font-size:.72rem;color:var(--muted)}
+
+/* ─── PACKAGES ──────────────────────────────────────────────── */
+#packages{background:var(--bg2);border-top:1px solid var(--border2)}
+.pkg-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(280px,1fr));gap:1.4rem}
+.pkg{background:var(--card);border:1px solid var(--border2);border-radius:8px;padding:2.25rem 1.85rem;display:flex;flex-direction:column;position:relative;transition:all var(--ease)}
+.pkg:hover{transform:translateY(-5px);border-color:rgba(212,175,55,.2)}
+.pkg.hot{border-color:rgba(212,175,55,.42);background:linear-gradient(160deg,#18160e 0%,var(--card) 60%)}
+.hot-badge{position:absolute;top:0;right:1.6rem;background:var(--gold);color:#000;font-size:.6rem;font-weight:700;letter-spacing:.12em;text-transform:uppercase;padding:.28rem .7rem;border-radius:0 0 4px 4px}
+.pkg-icon{font-size:1.6rem;color:var(--gold);margin-bottom:1.1rem}
+.pkg-name{font-family:var(--fh);font-size:1.35rem;margin-bottom:.3rem}
+.pkg-sessions{font-size:.68rem;font-weight:600;letter-spacing:.12em;text-transform:uppercase;color:var(--gold);margin-bottom:.9rem}
+.pkg-desc{font-size:.84rem;color:var(--muted);line-height:1.72;flex:1;margin-bottom:1.3rem}
+.pkg-feat{list-style:none;margin-bottom:1.85rem}
+.pkg-feat li{display:flex;align-items:center;gap:.55rem;font-size:.78rem;color:var(--muted);padding:.28rem 0}
+.pkg-feat li i{color:var(--gold);font-size:.65rem;flex-shrink:0}
+.pkg-cta{display:block;text-align:center;padding:.8rem;border-radius:var(--r);font-size:.84rem;font-weight:600;transition:all var(--ease)}
+.pkg-gold{background:var(--gold);color:#000}
+.pkg-gold:hover{background:var(--gold-l);box-shadow:0 6px 22px rgba(212,175,55,.28)}
+.pkg-outline{border:1px solid rgba(255,255,255,.12);color:var(--txt)}
+.pkg-outline:hover{border-color:var(--gold);color:var(--gold)}
+
+/* ─── TESTIMONIALS ──────────────────────────────────────────── */
+#testimonials{background:var(--bg);border-top:1px solid var(--border2)}
+.testi-hero{background:var(--bg2);border:1px solid var(--border);border-radius:10px;padding:2.75rem 3rem;position:relative;overflow:hidden;margin-bottom:1.5rem}
+.testi-hero::before{content:'\201C';position:absolute;top:-2.5rem;left:1.5rem;font-family:var(--fh);font-size:14rem;color:var(--gold);opacity:.055;line-height:1;pointer-events:none;user-select:none}
+.stars{display:flex;gap:.18rem;color:var(--gold);font-size:.82rem;margin-bottom:1rem}
+.t-quote{font-family:var(--fh);font-style:italic;line-height:1.7;color:var(--txt);margin-bottom:1.5rem;position:relative}
+.testi-hero .t-quote{font-size:clamp(1.05rem,2vw,1.35rem)}
+.t-byline{display:flex;align-items:center;gap:.9rem}
+.t-avatar{width:44px;height:44px;border-radius:50%;background:linear-gradient(135deg,var(--gold-d),var(--gold));display:flex;align-items:center;justify-content:center;font-family:var(--fh);font-size:.95rem;color:#000;font-weight:700;flex-shrink:0;letter-spacing:-.02em}
+.t-name{font-size:.9rem;font-weight:600;color:var(--txt);display:block}
+.t-loc{font-size:.74rem;color:var(--muted);display:block}
+.t-handle{font-size:.7rem;color:var(--gold);display:block;margin-top:.1rem}
+.testi-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(275px,1fr));gap:1.25rem}
+.tcard{background:var(--card);border:1px solid var(--border2);border-radius:8px;padding:1.65rem;position:relative;overflow:hidden;transition:all var(--ease);display:flex;flex-direction:column}
+.tcard::before{content:'\201C';position:absolute;top:-.6rem;left:1rem;font-family:var(--fh);font-size:7rem;color:var(--gold);opacity:.055;line-height:1;pointer-events:none;user-select:none}
+.tcard:hover{border-color:rgba(212,175,55,.22);transform:translateY(-4px)}
+.tcard .t-quote{font-size:.86rem;color:var(--muted);flex:1}
+
+/* ─── GAMES ─────────────────────────────────────────────────── */
+#games{background:var(--bg)}
+.games-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(310px,1fr));gap:1.4rem}
+.gcard{background:var(--card);border:1px solid var(--border2);border-radius:8px;padding:1.65rem;position:relative;overflow:hidden;transition:all var(--ease)}
+.gcard::after{content:'♟';position:absolute;right:1.2rem;top:.5rem;font-size:4.5rem;opacity:.03;line-height:1;pointer-events:none}
+.gcard:hover{transform:translateY(-4px);border-color:rgba(212,175,55,.2)}
+.result{display:inline-flex;align-items:center;gap:.35rem;padding:.25rem .72rem;border-radius:100px;font-size:.67rem;font-weight:700;letter-spacing:.08em;text-transform:uppercase;margin-bottom:.9rem}
+.win{background:rgba(74,222,128,.1);color:#4ade80;border:1px solid rgba(74,222,128,.2)}
+.draw{background:rgba(212,175,55,.1);color:var(--gold);border:1px solid rgba(212,175,55,.2)}
+.loss{background:rgba(248,113,113,.1);color:#f87171;border:1px solid rgba(248,113,113,.2)}
+.gcard h3{font-family:var(--fh);font-size:1.1rem;margin-bottom:.25rem}
+.gmeta{font-size:.74rem;color:var(--subtle);margin-bottom:.85rem}
+.gdesc{font-size:.82rem;color:var(--muted);line-height:1.65;margin-bottom:1.1rem}
+.arrow-link{display:inline-flex;align-items:center;gap:.4rem;font-size:.79rem;color:var(--gold);font-weight:500;transition:gap var(--ease)}
+.arrow-link:hover{gap:.7rem}
+
+/* ─── BLOG ──────────────────────────────────────────────────── */
+#blog{background:var(--bg2);border-top:1px solid var(--border2)}
+.blog-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(300px,1fr));gap:1.4rem}
+.bcard{background:var(--card);border:1px solid var(--border2);border-radius:8px;overflow:hidden;transition:all var(--ease)}
+.bcard:hover{transform:translateY(-4px);border-color:rgba(212,175,55,.2)}
+.bcard-stripe{height:3px;background:linear-gradient(90deg,var(--gold),var(--gold-d))}
+.bcard-body{padding:1.65rem}
+.b-cat{display:inline-block;padding:.2rem .62rem;background:rgba(212,175,55,.07);border-radius:3px;font-size:.65rem;color:var(--gold);font-weight:600;letter-spacing:.08em;margin-bottom:.6rem}
+.b-date{font-size:.68rem;color:var(--subtle);letter-spacing:.08em;text-transform:uppercase;margin-bottom:.6rem}
+.bcard h3{font-family:var(--fh);font-size:1.1rem;margin-bottom:.65rem;line-height:1.3}
+.bcard p{font-size:.81rem;color:var(--muted);line-height:1.68;margin-bottom:1.1rem}
+
+/* ─── CONTACT ───────────────────────────────────────────────── */
+#contact{background:var(--bg)}
+.contact-grid{display:grid;grid-template-columns:1fr 1.15fr;gap:4.5rem;align-items:start}
+.contact-lede{font-size:.91rem;color:var(--muted);line-height:1.8;margin-bottom:2rem;font-weight:300}
+.c-links{display:flex;flex-direction:column;gap:.75rem}
+.c-link{display:flex;align-items:center;gap:.9rem;padding:.95rem 1.15rem;background:var(--bg2);border:1px solid var(--border2);border-radius:6px;transition:all var(--ease)}
+.c-link:hover{border-color:var(--border);background:var(--bg3);transform:translateX(5px)}
+.c-ico{width:36px;height:36px;border-radius:50%;background:rgba(212,175,55,.09);display:flex;align-items:center;justify-content:center;color:var(--gold);font-size:.85rem;flex-shrink:0}
+.c-txt{flex:1}
+.c-lbl{font-size:.65rem;color:var(--subtle);text-transform:uppercase;letter-spacing:.1em;display:block}
+.c-val{font-size:.87rem;color:var(--txt);font-weight:500}
+.c-arr{color:var(--subtle);font-size:.7rem}
+/* booking box */
+.book-box{background:var(--card);border:1px solid var(--border);border-radius:8px;overflow:hidden}
+.book-head{background:linear-gradient(135deg,#1b1910,#131108);padding:1.4rem 1.75rem;border-bottom:1px solid var(--border)}
+.book-head h4{font-family:var(--fh);font-size:1.15rem;margin-bottom:.2rem}
+.book-head p{font-size:.78rem;color:var(--muted)}
+.book-body{padding:1.75rem}
+.book-steps{list-style:none;display:flex;flex-direction:column;gap:1.25rem;margin-bottom:2rem}
+.book-steps li{display:flex;align-items:flex-start;gap:1rem}
+.step-num{width:28px;height:28px;border-radius:50%;background:rgba(212,175,55,.12);border:1px solid rgba(212,175,55,.25);display:flex;align-items:center;justify-content:center;font-size:.72rem;font-weight:700;color:var(--gold);flex-shrink:0;margin-top:.1rem}
+.step-txt strong{display:block;font-size:.87rem;color:var(--txt);margin-bottom:.2rem}
+.step-txt span{font-size:.8rem;color:var(--muted);line-height:1.6}
+.book-ctas{display:flex;gap:.75rem;flex-wrap:wrap}
+
+/* ─── FOOTER ────────────────────────────────────────────────── */
+footer{background:#070707;border-top:1px solid var(--border2);padding:2.25rem 2rem}
+.foot-in{max-width:1180px;margin:0 auto;display:flex;align-items:center;justify-content:space-between;flex-wrap:wrap;gap:1rem}
+.foot-brand{font-family:var(--fh);font-size:.95rem;color:var(--gold)}
+.foot-brand span{color:var(--muted);font-weight:400}
+.foot-copy{font-size:.72rem;color:var(--subtle)}
+
+/* ─── ANIMATIONS ────────────────────────────────────────────── */
+.fu{opacity:0;transform:translateY(22px);transition:opacity .65s ease,transform .65s ease}
+.fu.in{opacity:1;transform:none}
+.d1{transition-delay:.1s}.d2{transition-delay:.2s}.d3{transition-delay:.3s}.d4{transition-delay:.4s}
+
+/* ─── RESPONSIVE ────────────────────────────────────────────── */
+@media(max-width:960px){
+  .about-grid{grid-template-columns:1fr}
+  .about-photo-wrap{max-width:320px;margin:0 auto}
+  .contact-grid{grid-template-columns:1fr}
+}
+@media(max-width:768px){
+  nav .nav-links{display:none}
+  .hamburger{display:block}
+  section{padding:4rem 1.25rem}
+  #hero{padding:6rem 1.25rem 4rem}
+  .pkg-grid,.games-grid,.blog-grid{grid-template-columns:1fr}
+}
+@media(max-width:480px){
+  .hero-ctas{flex-direction:column}
+  .hero-ctas .btn{width:100%;justify-content:center}
+  .r-grid{grid-template-columns:1fr 1fr}
+  .stats-row{grid-template-columns:1fr 1fr}
+}
+</style>
+</head>
+<body>
+
+<!-- ─── MOBILE NAV ──────────────────────────────────────────── -->
+<div id="mob" role="dialog" aria-modal="true">
+  <button id="mob-close" aria-label="Close menu" onclick="mobClose()"><i class="fa fa-xmark"></i></button>
+  <a href="#ratings" onclick="mobClose()">Ratings</a>
+  <a href="#about" onclick="mobClose()">About</a>
+  <a href="#packages" onclick="mobClose()">Coaching</a>
+  <a href="#testimonials" onclick="mobClose()">Reviews</a>
+  <a href="#games" onclick="mobClose()">Games</a>
+  <a href="#blog" onclick="mobClose()">Blog</a>
+  <a href="#contact" onclick="mobClose()">Contact</a>
+</div>
+
+<!-- ─── NAV ─────────────────────────────────────────────────── -->
+<nav id="nav" role="navigation" aria-label="Main navigation">
+  <a href="#hero" class="nav-logo"><img src="Knight%20king%20logo.png" alt="Vaglio Chess" class="logo-img"></a>
+  <ul class="nav-links" role="list">
+    <li><a href="#ratings">Ratings</a></li>
+    <li><a href="#about">About</a></li>
+    <li><a href="#packages">Coaching</a></li>
+    <li><a href="#testimonials">Reviews</a></li>
+    <li><a href="#games">Games</a></li>
+    <li><a href="#blog">Blog</a></li>
+    <li><a href="#contact" class="nav-book">Book a lesson</a></li>
+  </ul>
+  <button class="hamburger" aria-label="Open menu" onclick="mobOpen()"><i class="fa fa-bars"></i></button>
+</nav>
+
+<!-- ─── HERO ─────────────────────────────────────────────────── -->
+<section id="hero" aria-label="Introduction">
+  <div class="hero-glow" aria-hidden="true"></div>
+  <div class="hero-photo" aria-hidden="true">
+    <img src="WhatsApp%20Image%202025-01-06%20at%202.06.56%20PM.jpg" alt="">
+  </div>
+
+  <div class="wrap">
+    <div class="hero-inner">
+      <div class="h-pre" aria-hidden="true">
+        <div class="h-line"></div>
+        <span class="h-pre-txt">FIDE Candidate Master &middot; Chess Coach</span>
+      </div>
+
+      <h1>
+        <span class="hero-name">Emanuel Vaglio</span>
+        <span class="hero-handle">Olaffo</span>
+      </h1>
+
+      <div class="hero-badges">
+        <div class="hbadge"><i class="fa fa-crown" aria-hidden="true"></i> CM &middot; FIDE 2296</div>
+        <div class="dot-sep" aria-hidden="true"></div>
+        <div class="hbadge"><i class="fa fa-location-dot" aria-hidden="true"></i> San Jos&eacute;, Costa Rica</div>
+        <div class="dot-sep" aria-hidden="true"></div>
+        <div class="hbadge"><i class="fa fa-language" aria-hidden="true"></i> EN / ES</div>
+      </div>
+
+      <p class="hero-tag">&ldquo;Helping club players think better, play better.&rdquo;</p>
+
+      <div class="hero-ctas">
+        <a href="#contact" class="btn btn-gold"><i class="fa fa-calendar-check" aria-hidden="true"></i> Book a lesson</a>
+        <a href="https://lichess.org/coach/Olaffo" target="_blank" rel="noopener" class="btn btn-ghost"><i class="fa-solid fa-chess-knight" aria-hidden="true"></i> View my Lichess profile</a>
+      </div>
+    </div>
+  </div>
+
+  <div class="scroll-hint" aria-hidden="true">
+    <div class="scroll-wire"></div>
+    <span>Scroll</span>
+  </div>
+</section>
+
+<!-- ─── RATINGS ──────────────────────────────────────────────── -->
+<section id="ratings" aria-label="Live Lichess ratings">
+  <div class="wrap">
+    <div class="ratings-head">
+      <span class="eyebrow">Live from Lichess API</span>
+      <h2 class="sec-title">Current Ratings</h2>
+    </div>
+    <div class="r-grid">
+
+      <div class="r-card fu">
+        <div class="r-icon" aria-hidden="true">&#9889;</div>
+        <div class="r-label">Bullet</div>
+        <div class="r-val load" id="r-bullet" aria-live="polite">&mdash;</div>
+        <div class="r-games" id="g-bullet"></div>
+        <div class="live-pip"><span class="pip" aria-hidden="true"></span> Live</div>
+      </div>
+
+      <div class="r-card fu d1">
+        <div class="r-icon" aria-hidden="true">&#128293;</div>
+        <div class="r-label">Blitz</div>
+        <div class="r-val load" id="r-blitz" aria-live="polite">&mdash;</div>
+        <div class="r-games" id="g-blitz"></div>
+        <div class="live-pip"><span class="pip" aria-hidden="true"></span> Live</div>
+      </div>
+
+      <div class="r-card fu d2">
+        <div class="r-icon" aria-hidden="true">&#9203;</div>
+        <div class="r-label">Rapid</div>
+        <div class="r-val load" id="r-rapid" aria-live="polite">&mdash;</div>
+        <div class="r-games" id="g-rapid"></div>
+        <div class="live-pip"><span class="pip" aria-hidden="true"></span> Live</div>
+      </div>
+
+      <div class="r-card fu d3">
+        <div class="r-icon" aria-hidden="true">&#9820;</div>
+        <div class="r-label">Classical</div>
+        <div class="r-val load" id="r-classical" aria-live="polite">&mdash;</div>
+        <div class="r-games" id="g-classical"></div>
+        <div class="live-pip"><span class="pip" aria-hidden="true"></span> Live</div>
+      </div>
+
+    </div>
+  </div>
+</section>
+
+<!-- ─── ABOUT ────────────────────────────────────────────────── -->
+<section id="about" aria-label="About Emanuel Vaglio">
+  <div class="wrap">
+    <div class="about-grid">
+
+      <div class="about-photo-wrap fu">
+        <img src="unnamed.jpg" alt="Emanuel Vaglio at the chess board" class="about-photo">
+        <div class="about-photo-badge">
+          <strong>5+</strong>
+          <span>Years Coaching</span>
+        </div>
+      </div>
+
+      <div class="about-body">
+        <span class="eyebrow">About the Coach</span>
+        <h2 class="sec-title fu">Emanuel Vaglio</h2>
+
+        <p class="fu">I&rsquo;m a <strong>FIDE Candidate Master (CM)</strong> from San Jos&eacute;, Costa Rica, known on Lichess as <strong style="color:var(--gold)">Olaffo</strong>. Chess has been my lifelong passion &mdash; from learning the moves as a child to earning a FIDE rating of 2296 and competing in national and international tournaments.</p>
+
+        <p class="fu d1">With over <strong>5 years of dedicated coaching experience</strong>, I specialize in helping club players rated <strong>1000&ndash;1600</strong> find the patterns, habits, and thought processes that lead to real, lasting improvement. My lessons are bilingual &mdash; English and Spanish &mdash; so you can learn in whichever language feels most natural.</p>
+
+        <p class="fu d2">My coaching philosophy centers on <em style="color:var(--txt)">understanding over memorization</em>. I want you to develop genuine chess intuition, not just opening theory. Whether you struggle with tactics, time management, or positional play, every session is tailored to your specific needs and goals.</p>
+
+        <div class="tags fu d3">
+          <span class="tag">FIDE Candidate Master</span>
+          <span class="tag">Tactics &amp; Calculation</span>
+          <span class="tag">Positional Play</span>
+          <span class="tag">Opening Repertoire</span>
+          <span class="tag">Endgame Technique</span>
+          <span class="tag">Game Analysis</span>
+          <span class="tag">English / Espa&ntilde;ol</span>
+        </div>
+
+        <div class="stats-row fu d4">
+          <div class="stat-box">
+            <span class="stat-val">2296</span>
+            <span class="stat-lbl">FIDE Rating</span>
+          </div>
+          <div class="stat-box">
+            <span class="stat-val">5+</span>
+            <span class="stat-lbl">Years Coaching</span>
+          </div>
+          <div class="stat-box">
+            <span class="stat-val">1000&ndash;1600</span>
+            <span class="stat-lbl">Target Rating Range</span>
+          </div>
+          <div class="stat-box">
+            <span class="stat-val">&#127464;&#127479;</span>
+            <span class="stat-lbl">Costa Rica</span>
+          </div>
+        </div>
+      </div>
+
+    </div>
+  </div>
+</section>
+
+<!-- ─── PACKAGES ─────────────────────────────────────────────── -->
+<section id="packages" aria-label="Coaching packages">
+  <div class="wrap">
+    <div class="sec-head">
+      <span class="eyebrow">Coaching Plans</span>
+      <h2 class="sec-title fu">Choose Your Package</h2>
+      <p class="sec-sub fu d1">Sessions conducted via video call and Lichess Study. Recordings available on request.</p>
+      <div class="bar"></div>
+    </div>
+
+    <div class="pkg-grid">
+
+      <div class="pkg fu">
+        <div class="pkg-icon"><i class="fa-solid fa-chess-pawn" aria-hidden="true"></i></div>
+        <div class="pkg-name">Trial Lesson</div>
+        <div class="pkg-sessions">30-minute introduction</div>
+        <p class="pkg-desc">A short, no-commitment session to get to know each other. We&rsquo;ll talk about your background, look at one of your games, and map out a clear path forward.</p>
+        <ul class="pkg-feat">
+          <li><i class="fa fa-check" aria-hidden="true"></i> 30-minute live session</li>
+          <li><i class="fa fa-check" aria-hidden="true"></i> Strengths &amp; weaknesses assessment</li>
+          <li><i class="fa fa-check" aria-hidden="true"></i> Personalized study roadmap</li>
+          <li><i class="fa fa-check" aria-hidden="true"></i> No commitment required</li>
+        </ul>
+        <a href="https://lichess.org/@/Olaffo" target="_blank" rel="noopener" class="pkg-cta pkg-outline">Get started &rarr;</a>
+      </div>
+
+      <div class="pkg hot fu d1">
+        <div class="hot-badge">Most Popular</div>
+        <div class="pkg-icon"><i class="fa-solid fa-chess-knight" aria-hidden="true"></i></div>
+        <div class="pkg-name">Regular Lessons</div>
+        <div class="pkg-sessions">60 min &middot; $40 / session</div>
+        <p class="pkg-desc">Full hour-long lessons tailored to your level and goals. Whether you book weekly or monthly, each session builds directly on the last.</p>
+        <ul class="pkg-feat">
+          <li><i class="fa fa-check" aria-hidden="true"></i> 60-minute live session</li>
+          <li><i class="fa fa-check" aria-hidden="true"></i> Game review &amp; analysis</li>
+          <li><i class="fa fa-check" aria-hidden="true"></i> Opening repertoire development</li>
+          <li><i class="fa fa-check" aria-hidden="true"></i> Puzzle homework sets</li>
+          <li><i class="fa fa-check" aria-hidden="true"></i> WhatsApp &amp; email support</li>
+        </ul>
+        <a href="https://lichess.org/@/Olaffo" target="_blank" rel="noopener" class="pkg-cta pkg-gold">Book now &rarr;</a>
+      </div>
+
+    </div>
+  </div>
+</section>
+
+<!-- ─── TESTIMONIALS ─────────────────────────────────────────── -->
+<section id="testimonials" aria-label="Student testimonials">
+  <div class="wrap">
+    <div class="sec-head">
+      <span class="eyebrow">Student Reviews</span>
+      <h2 class="sec-title fu">What My Students Say</h2>
+      <p class="sec-sub fu d1">Real results from real players. All reviews from verified students on Lichess.</p>
+      <div class="bar"></div>
+    </div>
+
+    <!-- Featured testimonial -->
+    <div class="testi-hero fu" aria-label="Featured review">
+      <div class="stars" aria-label="5 out of 5 stars">
+        <i class="fa fa-star" aria-hidden="true"></i><i class="fa fa-star" aria-hidden="true"></i><i class="fa fa-star" aria-hidden="true"></i><i class="fa fa-star" aria-hidden="true"></i><i class="fa fa-star" aria-hidden="true"></i>
+      </div>
+      <p class="t-quote">&ldquo;Emanuel is the best coach that I could have hoped for. He&rsquo;s single-handedly helped me go from a 1500 rating to 1900 within months on Rapid 10+0 Chess.&rdquo;</p>
+      <div class="t-byline">
+        <div class="t-avatar" aria-hidden="true">SF</div>
+        <div>
+          <span class="t-name">Steve Ferrell</span>
+          <span class="t-loc">United States</span>
+          <span class="t-handle">NatureBoyRicFlair on Lichess</span>
+        </div>
+      </div>
+    </div>
+
+    <!-- Grid of 4 -->
+    <div class="testi-grid">
+
+      <div class="tcard fu">
+        <div class="stars" aria-label="5 out of 5 stars">
+          <i class="fa fa-star" aria-hidden="true"></i><i class="fa fa-star" aria-hidden="true"></i><i class="fa fa-star" aria-hidden="true"></i><i class="fa fa-star" aria-hidden="true"></i><i class="fa fa-star" aria-hidden="true"></i>
+        </div>
+        <p class="t-quote">&ldquo;Emanuel has significantly improved my chess by emphasizing flexibility in the opening, strong positional play, and logical, human decision-making rather than relying on engine lines. Before working with him, I depended on dubious traps and gambits to gain an edge. Now, I focus on building positional advantages and playing solid, principled moves to win my games.&rdquo;</p>
+        <div class="t-byline" style="margin-top:1.25rem">
+          <div class="t-avatar" aria-hidden="true">NR</div>
+          <div>
+            <span class="t-name">Nicholas Rossi</span>
+            <span class="t-loc">United States</span>
+            <span class="t-handle">FastSwipe1 on Lichess</span>
+          </div>
+        </div>
+      </div>
+
+      <div class="tcard fu d1">
+        <div class="stars" aria-label="5 out of 5 stars">
+          <i class="fa fa-star" aria-hidden="true"></i><i class="fa fa-star" aria-hidden="true"></i><i class="fa fa-star" aria-hidden="true"></i><i class="fa fa-star" aria-hidden="true"></i><i class="fa fa-star" aria-hidden="true"></i>
+        </div>
+        <p class="t-quote">&ldquo;My game has grown immensely over the short four months we have been working together. He is an incredibly attentive and insightful coach who truly understands how to elevate a student&rsquo;s play. I always look forward to the interesting and fun problems he provides for me to work on. His excellent guidance has made a clear difference, which is already showing in my recent 300 point rating increase!&rdquo;</p>
+        <div class="t-byline" style="margin-top:1.25rem">
+          <div class="t-avatar" aria-hidden="true">PH</div>
+          <div>
+            <span class="t-name">Phill</span>
+            <span class="t-loc">United States</span>
+            <span class="t-handle">Dogter1 on Lichess</span>
+          </div>
+        </div>
+      </div>
+
+      <div class="tcard fu d2">
+        <div class="stars" aria-label="5 out of 5 stars">
+          <i class="fa fa-star" aria-hidden="true"></i><i class="fa fa-star" aria-hidden="true"></i><i class="fa fa-star" aria-hidden="true"></i><i class="fa fa-star" aria-hidden="true"></i><i class="fa fa-star" aria-hidden="true"></i>
+        </div>
+        <p class="t-quote">&ldquo;Lessons are engaging and well-structured, balancing theory with practical play. What stands out most is his patience and genuine passion for teaching&mdash;no matter your skill level, you feel supported and motivated to improve. Highly recommended for anyone looking to grow in chess.&rdquo;</p>
+        <div class="t-byline" style="margin-top:1.25rem">
+          <div class="t-avatar" aria-hidden="true">CS</div>
+          <div>
+            <span class="t-name">Cooper Scott</span>
+            <span class="t-loc">Kentucky, USA</span>
+            <span class="t-handle">Cscott76 on Lichess</span>
+          </div>
+        </div>
+      </div>
+
+      <div class="tcard fu d3">
+        <div class="stars" aria-label="5 out of 5 stars">
+          <i class="fa fa-star" aria-hidden="true"></i><i class="fa fa-star" aria-hidden="true"></i><i class="fa fa-star" aria-hidden="true"></i><i class="fa fa-star" aria-hidden="true"></i><i class="fa fa-star" aria-hidden="true"></i>
+        </div>
+        <p class="t-quote">&ldquo;Coach Emanuel Vaglio has been teaching my son chess for several years, and his guidance has truly boosted both my son&rsquo;s skills and confidence. This growth is especially evident during his school chess competitions. We are very grateful for the support and encouragement Coach Emanuel consistently provides.&rdquo;</p>
+        <div class="t-byline" style="margin-top:1.25rem">
+          <div class="t-avatar" aria-hidden="true">RS</div>
+          <div>
+            <span class="t-name">Robyn Sexton</span>
+            <span class="t-loc">Illinois, USA</span>
+            <span class="t-handle">GavinHS28 on Lichess</span>
+          </div>
+        </div>
+      </div>
+
+    </div>
+  </div>
+</section>
+
+<!-- ─── FEATURED GAMES ───────────────────────────────────────── -->
+<section id="games" aria-label="Featured games">
+  <div class="wrap">
+    <div class="sec-head">
+      <span class="eyebrow">Featured Games</span>
+      <h2 class="sec-title fu">Annotated Masterpieces</h2>
+      <p class="sec-sub fu d1">Selected games against grandmaster opposition &mdash; open each to study with full engine analysis.</p>
+      <div class="bar"></div>
+    </div>
+
+    <div class="games-grid">
+
+      <div class="gcard fu">
+        <div class="result loss"><i class="fa fa-xmark" aria-hidden="true"></i> Loss</div>
+        <h3>vs. GM Andrey Esipenko</h3>
+        <div class="gmeta">GM Esipenko (2700+) &middot; Chess.com</div>
+        <p class="gdesc">A hard-fought game against one of the world&rsquo;s top young grandmasters. An instructive study in what elite preparation and precision looks like at the highest level.</p>
+        <a href="https://www.chess.com/analysis/game/live/116112052285/review" target="_blank" rel="noopener" class="arrow-link">Analyze on Chess.com <i class="fa fa-arrow-right" aria-hidden="true"></i></a>
+      </div>
+
+      <div class="gcard fu d1">
+        <div class="result win"><i class="fa fa-trophy" aria-hidden="true"></i> Win</div>
+        <h3>vs. GM Gascon</h3>
+        <div class="gmeta">GM Gascon &middot; Chess.com</div>
+        <p class="gdesc">A dynamic middlegame featuring sharp tactical complications and precise decision-making under pressure, culminating in a decisive result against grandmaster-level opposition.</p>
+        <a href="https://www.chess.com/analysis/game/live/73272308629/analysis" target="_blank" rel="noopener" class="arrow-link">Analyze on Chess.com <i class="fa fa-arrow-right" aria-hidden="true"></i></a>
+      </div>
+
+      <div class="gcard fu d2">
+        <div class="result win"><i class="fa fa-trophy" aria-hidden="true"></i> Win</div>
+        <h3>vs. GM Alfonso Romero Holmes</h3>
+        <div class="gmeta">GM Romero Holmes &middot; Alajuela Open &middot; 2014</div>
+        <p class="gdesc">A landmark win at the 2014 Alajuela Open against the experienced Spanish grandmaster &mdash; a model of accurate positional play and clean conversion in a classical game.</p>
+        <a href="https://chessarchive.net/en/game/ELXW612zQy/vaglio-mattey-emanuel-vs-romero-holmes-alfonso-2014-01-23-5-alajuela-open-2014" target="_blank" rel="noopener" class="arrow-link">View on Chess Archive <i class="fa fa-arrow-right" aria-hidden="true"></i></a>
+      </div>
+
+    </div>
+  </div>
+</section>
+
+<!-- ─── BLOG ─────────────────────────────────────────────────── -->
+<section id="blog" aria-label="Blog posts">
+  <div class="wrap">
+    <div class="sec-head">
+      <span class="eyebrow">Chess Insights</span>
+      <h2 class="sec-title fu">From the Coach&rsquo;s Desk</h2>
+      <p class="sec-sub fu d1">Chess concepts, training methods, and game analysis for improving club players.</p>
+      <div class="bar"></div>
+    </div>
+
+    <div class="blog-grid">
+
+      <div class="bcard fu">
+        <div class="bcard-stripe" aria-hidden="true"></div>
+        <div class="bcard-body">
+          <div class="b-cat">Tactics</div>
+          <div class="b-date">March 2025</div>
+          <h3>Why Pattern Recognition Beats Calculation for Club Players</h3>
+          <p>Most 1200&ndash;1500 players try to calculate five moves deep and miss the tactic right in front of them. Here&rsquo;s why building your pattern library is more effective than brute-force calculation.</p>
+          <a href="https://lichess.org/@/Olaffo/blog" target="_blank" rel="noopener" class="arrow-link">Read on Lichess <i class="fa fa-arrow-right" aria-hidden="true"></i></a>
+        </div>
+      </div>
+
+      <div class="bcard fu d1">
+        <div class="bcard-stripe" aria-hidden="true"></div>
+        <div class="bcard-body">
+          <div class="b-cat">Openings</div>
+          <div class="b-date">January 2025</div>
+          <h3>Building an Opening Repertoire: Start Simple, Win More</h3>
+          <p>You don&rsquo;t need to memorize 20 lines of theory. Here&rsquo;s how I help my students build a repertoire with clear plans in every position &mdash; one that works even when your opponent deviates.</p>
+          <a href="https://lichess.org/@/Olaffo/blog" target="_blank" rel="noopener" class="arrow-link">Read on Lichess <i class="fa fa-arrow-right" aria-hidden="true"></i></a>
+        </div>
+      </div>
+
+      <div class="bcard fu d2">
+        <div class="bcard-stripe" aria-hidden="true"></div>
+        <div class="bcard-body">
+          <div class="b-cat">Endgames</div>
+          <div class="b-date">November 2024</div>
+          <h3>The Three Endgames Every Club Player Must Know Cold</h3>
+          <p>King &amp; pawn, rook &amp; pawn, and the Lucena position. Master these three and you&rsquo;ll convert winning positions that most players at your rating routinely throw away.</p>
+          <a href="https://lichess.org/@/Olaffo/blog" target="_blank" rel="noopener" class="arrow-link">Read on Lichess <i class="fa fa-arrow-right" aria-hidden="true"></i></a>
+        </div>
+      </div>
+
+    </div>
+  </div>
+</section>
+
+<!-- ─── CONTACT ──────────────────────────────────────────────── -->
+<section id="contact" aria-label="Contact and booking">
+  <div class="wrap">
+    <div class="contact-grid">
+
+      <div>
+        <span class="eyebrow">Get in Touch</span>
+        <h2 class="sec-title fu">Ready to improve<br>your chess?</h2>
+        <p class="contact-lede fu d1">The best way to reach me is directly on Lichess or by email. I respond to all inquiries within 24&nbsp;hours.</p>
+
+        <div class="c-links fu d2">
+          <a href="https://lichess.org/coach/Olaffo" target="_blank" rel="noopener" class="c-link">
+            <div class="c-ico"><i class="fa-solid fa-chess-knight" aria-hidden="true"></i></div>
+            <div class="c-txt">
+              <span class="c-lbl">Lichess Coach Profile</span>
+              <span class="c-val">lichess.org/coach/Olaffo</span>
+            </div>
+            <i class="fa fa-chevron-right c-arr" aria-hidden="true"></i>
+          </a>
+
+          <a href="https://www.chess.com/member/VaglioSagan" target="_blank" rel="noopener" class="c-link">
+            <div class="c-ico"><i class="fa-solid fa-chess" aria-hidden="true"></i></div>
+            <div class="c-txt">
+              <span class="c-lbl">Chess.com Profile</span>
+              <span class="c-val">VaglioSagan</span>
+            </div>
+            <i class="fa fa-chevron-right c-arr" aria-hidden="true"></i>
+          </a>
+
+          <a href="https://youtube.com/@VaglioChess" target="_blank" rel="noopener" class="c-link">
+            <div class="c-ico"><i class="fa-brands fa-youtube" aria-hidden="true"></i></div>
+            <div class="c-txt">
+              <span class="c-lbl">YouTube Channel</span>
+              <span class="c-val">youtube.com/@VaglioChess</span>
+            </div>
+            <i class="fa fa-chevron-right c-arr" aria-hidden="true"></i>
+          </a>
+
+          <a href="mailto:vaglioe97@gmail.com" class="c-link">
+            <div class="c-ico"><i class="fa fa-envelope" aria-hidden="true"></i></div>
+            <div class="c-txt">
+              <span class="c-lbl">Email</span>
+              <span class="c-val">vaglioe97@gmail.com</span>
+            </div>
+            <i class="fa fa-chevron-right c-arr" aria-hidden="true"></i>
+          </a>
+        </div>
+      </div>
+
+      <div class="book-box fu d3">
+        <div class="book-head">
+          <h4>How to Book a Lesson</h4>
+          <p>Simple, no sign-up required</p>
+        </div>
+        <div class="book-body">
+          <ol class="book-steps">
+            <li>
+              <div class="step-num">1</div>
+              <div class="step-txt">
+                <strong>Send a message</strong>
+                <span>Reach out via Lichess message or email to introduce yourself and describe your current level and goals.</span>
+              </div>
+            </li>
+            <li>
+              <div class="step-num">2</div>
+              <div class="step-txt">
+                <strong>Pick a time</strong>
+                <span>We&rsquo;ll agree on a schedule that works for both of us. Sessions run 60&nbsp;minutes over video call.</span>
+              </div>
+            </li>
+            <li>
+              <div class="step-num">3</div>
+              <div class="step-txt">
+                <strong>Start improving</strong>
+                <span>Show up with your games ready. I&rsquo;ll handle the rest.</span>
+              </div>
+            </li>
+          </ol>
+          <div class="book-ctas">
+            <a href="https://lichess.org/@/Olaffo" target="_blank" rel="noopener" class="btn btn-gold" style="flex:1;justify-content:center">
+              <i class="fa-solid fa-chess-knight" aria-hidden="true"></i> Message on Lichess
+            </a>
+            <a href="mailto:vaglioe97@gmail.com" class="btn btn-ghost" style="flex:1;justify-content:center">
+              <i class="fa fa-envelope" aria-hidden="true"></i> Send Email
+            </a>
+          </div>
+        </div>
+      </div>
+
+    </div>
+  </div>
+</section>
+
+<!-- ─── FOOTER ───────────────────────────────────────────────── -->
+<footer role="contentinfo">
+  <div class="foot-in">
+    <img src="Knight%20king%20logo.png" alt="Vaglio Chess" class="foot-logo-img">
+    <div class="foot-copy">&copy; 2025 Emanuel Vaglio &middot; San Jos&eacute;, Costa Rica</div>
+  </div>
+</footer>
+
+<script>
+/* ── NAV SCROLL ──────────────────────────────────────────── */
+(function(){
+  var nav=document.getElementById('nav');
+  function onScroll(){nav.classList.toggle('solid',window.scrollY>60)}
+  window.addEventListener('scroll',onScroll,{passive:true});
+  onScroll();
+})();
+
+/* ── MOBILE NAV ──────────────────────────────────────────── */
+function mobOpen(){
+  var m=document.getElementById('mob');
+  m.classList.add('open');
+  document.body.style.overflow='hidden';
+}
+function mobClose(){
+  var m=document.getElementById('mob');
+  m.classList.remove('open');
+  document.body.style.overflow='';
+}
+document.getElementById('mob').addEventListener('keydown',function(e){
+  if(e.key==='Escape')mobClose();
+});
+
+/* ── LIVE RATINGS ────────────────────────────────────────── */
+(function(){
+  var map={
+    bullet:   {val:'r-bullet',   games:'g-bullet'},
+    blitz:    {val:'r-blitz',    games:'g-blitz'},
+    rapid:    {val:'r-rapid',    games:'g-rapid'},
+    classical:{val:'r-classical',games:'g-classical'}
+  };
+
+  function setRating(key,perf){
+    var ids=map[key];
+    var valEl=document.getElementById(ids.val);
+    var gEl=document.getElementById(ids.games);
+    if(!valEl)return;
+    valEl.classList.remove('load');
+    if(perf&&perf.rating){
+      valEl.textContent=perf.rating;
+      if(gEl&&perf.games!=null)
+        gEl.textContent=perf.games.toLocaleString()+' games';
+    } else {
+      valEl.textContent='N/A';
+    }
+  }
+
+  function setError(){
+    Object.keys(map).forEach(function(k){
+      var el=document.getElementById(map[k].val);
+      if(el){el.textContent='—';el.classList.remove('load');}
+    });
+  }
+
+  fetch('https://lichess.org/api/user/Olaffo',{
+    headers:{Accept:'application/json'},
+    mode:'cors'
+  })
+  .then(function(r){if(!r.ok)throw new Error(r.status);return r.json();})
+  .then(function(d){
+    var p=d.perfs||{};
+    Object.keys(map).forEach(function(k){setRating(k,p[k]);});
+  })
+  .catch(setError);
+})();
+
+/* ── INTERSECTION OBSERVER ───────────────────────────────── */
+(function(){
+  var io=new IntersectionObserver(function(entries){
+    entries.forEach(function(e){
+      if(e.isIntersecting)e.target.classList.add('in');
+    });
+  },{threshold:0.12,rootMargin:'0px 0px -36px 0px'});
+  document.querySelectorAll('.fu').forEach(function(el){io.observe(el);});
+})();
+</script>
+</body>
+</html>
