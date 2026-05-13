@@ -937,7 +937,8 @@ document.getElementById('mob').addEventListener('keydown',function(e){
   /* ── run all animations once we have data + visibility ── */
   function run(){
     if(!fetchedPerfs||!sectionSeen)return;
-    CATS.forEach(function(k,i){animateCard(k,fetchedPerfs[k],i);});
+    var API_KEY={hyperbullet:'ultraBullet'};
+    CATS.forEach(function(k,i){animateCard(k,fetchedPerfs[API_KEY[k]||k],i);});
   }
 
   /* ── watch #ratings entering viewport ── */
