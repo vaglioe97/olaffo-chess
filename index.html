@@ -439,12 +439,12 @@ footer{background:#070707;border-top:1px solid var(--border2);padding:2.25rem 2r
       </div>
 
       <div class="r-card fu d3">
-        <div class="r-icon" aria-hidden="true">&#9820;</div>
-        <div class="r-label">Classical</div>
-        <div class="r-val load" id="r-classical" aria-live="polite">&mdash;</div>
-        <div class="r-games" id="g-classical"></div>
-        <div class="r-bar-wrap"><div class="r-bar" id="bar-classical"></div></div>
-        <div class="r-pct" id="pct-classical"></div>
+        <div class="r-icon" aria-hidden="true">&#9889;&#9889;</div>
+        <div class="r-label">Hyperbullet</div>
+        <div class="r-val load" id="r-hyperbullet" aria-live="polite">&mdash;</div>
+        <div class="r-games" id="g-hyperbullet"></div>
+        <div class="r-bar-wrap"><div class="r-bar" id="bar-hyperbullet"></div></div>
+        <div class="r-pct" id="pct-hyperbullet"></div>
         <div class="live-pip"><span class="pip" aria-hidden="true"></span> Live</div>
       </div>
 
@@ -879,7 +879,7 @@ document.getElementById('mob').addEventListener('keydown',function(e){
 
 /* ── LIVE RATINGS ────────────────────────────────────────── */
 (function(){
-  var CATS=['bullet','blitz','rapid','classical'];
+  var CATS=['bullet','blitz','rapid','hyperbullet'];
   var fetchedPerfs=null;
   var sectionSeen=false;
 
